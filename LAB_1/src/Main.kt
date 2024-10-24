@@ -26,11 +26,19 @@ fun getGrafo(rutaArchivo: String): Grafo? { // para leer el grafo de un archivo.
 }
 
 fun getMatrizDeAdyacencia(g: Grafo): Matrix {
-    var n = g.obtenerNumeroDeVertices()
-    var A = Matrix(n,n) // el constructor por defecto inicializa en ceros
-    /*
-    SU CODIGO
-    */
+    val n = g.obtenerNumeroDeVertices()
+    val A = Matrix(n, n) // el constructor por defecto inicializa en ceros
+    for (i in 0 until n) {
+        try {
+            var adyacentes = g.adyacentes(i + 1)
+            val lados = adyacentes.map{it.elOtroVertice(i+1)}
+            for (lado in lados) {
+                A[i, lado - 1] = 1.0
+            }
+        } catch (e: RuntimeException) {
+            continue
+        }
+    }
     return A
 }
 
