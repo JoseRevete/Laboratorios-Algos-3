@@ -61,9 +61,39 @@ fun getComponentesConexas(g: Grafo): List<List<Int>> { //Construir una lista de 
     val esNoDirigido = g is GrafoNoDirigido || g is GrafoNoDirigidoCosto
     val visited = BooleanArray(n) // El constructor por defecto inicializa en False
     val components = mutableListOf<List<Int>>()
-    /*
-    SU CODIGO
-    */
+    for (i in 0 until n) {
+        if (!visited[i]) {
+            val component = mutableListOf<Int>()
+            val pila = mutableListOf<Int>()
+            pila.add(i)
+            visited[i] = true
+            component.add(i + 1)
+            while (pila.isNotEmpty()) {
+                val node = pila.removeAt(pila.size - 1)
+                for (j in 0 until n) {
+                    if (esNoDirigido) {
+                        if (C[node, j] != 0.0 && !visited[j]) {
+                            pila.add(j)
+                            visited[j] = true
+                            component.add(j + 1)
+                        }
+                    } else {
+                        if (C[node, j] != 0.0 && !visited[j]) {
+                            pila.add(j)
+                            visited[j] = true
+                            component.add(j + 1)
+                        }
+                        if (C[j, node] != 0.0 && !visited[j]) {
+                            pila.add(j)
+                            visited[j] = true
+                            component.add(j + 1)
+                        }
+                    }
+                }
+            }
+            components.add(component)
+        }
+    }
     return components
 }
 
