@@ -1,0 +1,96 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar libGrafo",
+            "type": "shell",
+            "command": "kotlinc",
+            "args": [
+                "-d",
+                ".",
+                "ve/usb/libGrafo/Arco.kt",
+                "ve/usb/libGrafo/ArcoCosto.kt",
+                "ve/usb/libGrafo/Arista.kt",
+                "ve/usb/libGrafo/AristaCosto.kt",
+                "ve/usb/libGrafo/Grafo.kt",
+                "ve/usb/libGrafo/GrafoDirigido.kt",
+                "ve/usb/libGrafo/GrafoDirigidoCosto.kt",
+                "ve/usb/libGrafo/GrafoNoDirigido.kt",
+                "ve/usb/libGrafo/GrafoNoDirigidoCosto.kt",
+                "ve/usb/libGrafo/Lado.kt"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Crear JAR de libGrafo",
+            "type": "shell",
+            "command": "jar",
+            "args": [
+                "cf",
+                "libs/libGrafo.jar",
+                "-C",
+                ".",
+                "."
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "Compilar libGrafo"
+        },
+        {
+            "label": "Compilar Main",
+            "type": "shell",
+            "command": "kotlinc",
+            "args": [
+                "-d", "bin",
+                "-cp", "libs/Jama.jar:libs/libGrafo.jar",
+                "src/Main.kt"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "Crear JAR de libGrafo"
+        },
+        {
+            "label": "Ejecutar Main",
+            "type": "shell",
+            "command": "kotlin",
+            "args": [
+                "-cp", "bin:libs/Jama.jar:libs/libGrafo.jar",
+                "MainKt"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "dependsOn": "Compilar Main"
+        },
+        {
+            "label": "Format with ktlint",
+            "type": "shell",
+            "command": "./ktlint",
+            "args": [
+                "-F",
+                "${input:filename}"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "filename",
+            "type": "promptString",
+            "description": "Enter the file path to format",
+            "default": "src/Main.kt"
+        }
+    ]
+}
