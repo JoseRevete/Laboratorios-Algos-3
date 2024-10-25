@@ -75,36 +75,30 @@ fun getComponentesConexas(g: Grafo): List<List<Int>> { //Construir una lista de 
     val visited = BooleanArray(n) // El constructor por defecto inicializa en False
     val components = mutableListOf<List<Int>>()
     for (i in 0 until n) {
+        C.set(i, i, 1.0)
         if (!visited[i]) {
-            val component = mutableListOf<Int>()
-            val pila = mutableListOf<Int>()
-            pila.add(i)
+            val componente = mutableListOf<Int>()
+            val cola = ArrayDeque<Int>()
+            cola.add(i)
             visited[i] = true
-            component.add(i + 1)
-            while (pila.isNotEmpty()) {
-                val node = pila.removeAt(pila.size - 1)
+
+            while (cola.isNotEmpty()) {
+                val nodo = cola.removeFirst()
+                componente.add(nodo + 1)
+
                 for (j in 0 until n) {
-                    if (esNoDirigido) {
-                        if (C[node, j] != 0.0 && !visited[j]) {
-                            pila.add(j)
-                            visited[j] = true
-                            component.add(j + 1)
-                        }
+                    val esPosibleAdyacente = if (esNoDirigido) {
+                        C[nodo, j] == 1.0 && !visited[j]
                     } else {
-                        if (C[node, j] != 0.0 && !visited[j]) {
-                            pila.add(j)
-                            visited[j] = true
-                            component.add(j + 1)
-                        }
-                        if (C[j, node] != 0.0 && !visited[j]) {
-                            pila.add(j)
-                            visited[j] = true
-                            component.add(j + 1)
-                        }
+                        C[nodo, j] == 1.0 && C[j, nodo] == 1.0 && !visited[j]
+                    }
+                    if (esPosibleAdyacente) {
+                        cola.add(j)
+                        visited[j] = true
                     }
                 }
             }
-            components.add(component)
+            components.add(componente)
         }
     }
     return components
