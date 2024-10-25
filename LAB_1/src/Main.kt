@@ -45,9 +45,22 @@ fun getMatrizDeAdyacencia(g: Grafo): Matrix {
 fun getMatrizDeAlcance(A: Matrix): Matrix {
     val R = A.copy()
     val n = R.rowDimension
-    /*
-    SU CODIGO
-    */
+    val I = Matrix.identity(n, n)
+    R.plusEquals(I)
+    
+    for (k in 0 until n) {
+        for (i in 0 until n) {
+            if (R[i, k] == 1.0 && (i != k)){
+                for (j in 0 until n) {
+                    if (R[i, j] != 1.0){
+                        R[i, j] = R[i, j] + R[k, j]
+                    }
+                }
+            }
+            
+        }
+    }
+    
     return R
 }
 
