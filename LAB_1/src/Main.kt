@@ -106,6 +106,7 @@ fun getComponentesConexas(g: Grafo): List<List<Int>> { //Construir una lista de 
 
 fun main(args: Array<String>) {
     File(".").listFiles{_,name->name.endsWith(".txt")}?.sortedBy{it.name}?.forEach{file->
+        println("Archivo: ${file.absolutePath}")
         getGrafo(file.absolutePath)?.let{grafo->
             print("Componentes conexas: ${getComponentesConexas(grafo)}\n\n${"*".repeat(120)}\n")
         }?: print("No se pudo crear la instancia del grafo para el archivo ${file.name}.")
