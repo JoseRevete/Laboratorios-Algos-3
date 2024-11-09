@@ -39,12 +39,13 @@ fun getMSTbyPrim(g: GrafoNoDirigidoCosto): List<Pair<List<Int>, List<Triple<Int,
     fun visit(v: Int) {
         visited.add(v)
         for (arista in g.adyacentes(v)) {
-            if (arista.b !in visited) {
+            if (arista.b !in visited){
                 pq.add(Triple(v, arista.b, arista.costo))
+            } else if(arista.a !in visited){
+                pq.add(Triple(arista.a, v, arista.costo))
             }
         }
     }
-
     // Start from vertex 1
     visit(1)
     while (pq.isNotEmpty() && visited.size < g.obtenerNumeroDeVertices()) {
@@ -52,6 +53,9 @@ fun getMSTbyPrim(g: GrafoNoDirigidoCosto): List<Pair<List<Int>, List<Triple<Int,
         if (v !in visited) {
             mst.add(Triple(u, v, costo))
             visit(v)
+        } else if (u !in visited){
+            mst.add(Triple(u, v, costo))
+            visit(u)
         }
     }
 
