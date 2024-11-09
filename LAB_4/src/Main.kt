@@ -31,11 +31,14 @@ fun seleccionaArchivoTxt(prompt:String):String?{
 	return null
 }
 
+
+// Función que recibe un grafo no dirigido con costo y retorna un par de listas, la primera con las componentes conexas y la segunda con las aristas del MST
 fun getMSTbyPrim(g: GrafoNoDirigidoCosto): List<Pair<List<Int>, List<Triple<Int, Int, Double>>>> {
     val mst = mutableListOf<Triple<Int, Int, Double>>()
     val visited = mutableSetOf<Int>()
     val pq = java.util.PriorityQueue<Triple<Int, Int, Double>>(compareBy { it.third })
 
+    // Función que visita un vértice y agrega sus aristas al priority queue
     fun visit(v: Int) {
         visited.add(v)
         for (arista in g.adyacentes(v)) {
@@ -46,8 +49,9 @@ fun getMSTbyPrim(g: GrafoNoDirigidoCosto): List<Pair<List<Int>, List<Triple<Int,
             }
         }
     }
-    // Start from vertex 1
+    // Se inicia el algoritmo con el vértice 1
     visit(1)
+    // Mientras la cola de prioridad no esté vacía y no se hayan visitado todos los vértices, se agregan a la cola lados de vértices no visitados
     while (pq.isNotEmpty() && visited.size < g.obtenerNumeroDeVertices()) {
         val (u, v, costo) = pq.poll()
         if (v !in visited) {
@@ -59,6 +63,8 @@ fun getMSTbyPrim(g: GrafoNoDirigidoCosto): List<Pair<List<Int>, List<Triple<Int,
         }
     }
 
+    // Se obtienen las componentes conexas
+    // Se recorren las aristas del MST y se agregan a las componentes conexas
     val componentesConexas = mutableListOf<List<Int>>()
     val aristasPorComponente = mutableListOf<List<Triple<Int, Int, Double>>>()
     componentesConexas.add(visited.toList())
