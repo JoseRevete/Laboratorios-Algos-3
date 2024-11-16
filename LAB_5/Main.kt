@@ -71,10 +71,13 @@ class Graph {
     }
     fun mstKruskal(): List<Edge> {     // Kruskal
         val mst=mutableListOf<Edge>()
+        // Ordenar aristas por peso
         val edges = getEdges().sortedBy { it.w }
+        // Inicializamos estructuras de datos necesarias
         val parent = IntArray(V) { it }
         val rank = IntArray(V) { 0 }
 
+        // Funcion auxiliar para encontrar la raiz de un conjunto
         fun find(u: Int): Int {
             if (parent[u] != u) {
                 parent[u] = find(parent[u])
@@ -82,9 +85,11 @@ class Graph {
             return parent[u]
         }
 
+        // Funcion auxiliar para unir dos conjuntos
         fun union(u: Int, v: Int) {
             val rootU = find(u)
             val rootV = find(v)
+            // Si no estan en el mismo conjunto, los unimos
             if (rootU != rootV) {
                 if (rank[rootU] > rank[rootV]) {
                     parent[rootV] = rootU
@@ -97,6 +102,7 @@ class Graph {
             }
         }
 
+        // Iterando sobre las aristas
         for (edge in edges) {
             if (find(edge.u) != find(edge.v)) {
                 mst.add(edge)
