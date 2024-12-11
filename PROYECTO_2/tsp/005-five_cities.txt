@@ -1,0 +1,9 @@
+Ejemplo con 5 ciudades
+five_cities
+5
+141
+1	1	14
+2	4	19
+3	17	34
+4	40	43
+5	49	2
